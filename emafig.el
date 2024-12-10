@@ -6,19 +6,23 @@
 ;;
 ;;
 
+(define-minor-mode emafig-mode
+  "Toggles the emafig mode"
+  nil ; Initial value, nil for disabled
+  :global nil
+  :group 'markdown
+  :lighter " emafig"
+  :keymap
+  (list (cons (kbd "C-c r") (lambda ()
+                              (interactive)
+                              (emafig-convert-and-send))))
+  (if emafig-mode
+      (message "EMAFIG mode enabled")
+    (message "EMAFIG mode disabled")))
+
+
 (require 'url)
 (setq token "hltc8L1x6NCusoHqkUJUmmhdHbN8Hwfkzu5XRTKWiEqQym5n") ;; Local instance no point in trying.
-
-(defvar emafig-mode-map (make-sparse-keymap)
-  "The keymap for emafig minor mode.")
-
-(define-key emafig-basic-mode-map (kbd "C-c r")
-            (lambda ()
-              (interactive)
-              (emafig-convert-and-send)))
-
-(add-to-list 'minor-mode-alist '(emafig-mode " emafig"))
-(add-to-list 'minor-mode-map-alist (cons 'emafig-mode 'emafig-mode-map))
 
 (defun emafig-open-template-buffer ()
   "Open a new buffer formatted for sending a thought."
@@ -30,11 +34,10 @@
     (erase-buffer)
     (insert template-content)
     (markdown-mode)
-    
+    (emafig-mode)
     (goto-char (+ (point-min) 2))))
 
 (defun emafig-convert-buffer-to-thought ()
-  (interactive)
   (let* ((raw-thought (buffer-substring-no-properties (point-min) (point-max)))
          (parts (string-split raw-thought "\n"))
          (title (substring (car parts) 2))
