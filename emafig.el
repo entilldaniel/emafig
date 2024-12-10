@@ -38,14 +38,12 @@
 (defun convert-and-send ()
   (interactive)
   (let* ((thought (convert-to-thought))
-         (json (convert-to-json thought)))
-    (url-request-method "POST")
-    (url-request-extra-headers
-     '(("Authorization" . (concat "Bearer " token))))
-    (message "Sending json")
-    (url-request-data (encode-coding-string json 'utf-8))
-    (url-retrieve "http://localhost:4000/api/thoughts")
-    ))
+         (json (convert-to-json thought))
+         (url-request-method "POST")
+         (url-request-extra-headers
+          '(("Authorization" . (concat "Bearer " token))))
+         (url-request-data json))
+    (url-retrieve-synchronously "http://localhost:4000/api/thoughts")))
 
 
 (defun split-contents ()
