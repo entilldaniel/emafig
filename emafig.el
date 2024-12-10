@@ -1,5 +1,4 @@
 ;;; -*- lexical-binding:t -*-
-
 ;; A private plugin for posting thoughts to figueroa.se
 
 (require 'url)
@@ -20,8 +19,8 @@
 
 
 (defun convert-to-tags (tags-line)
-  (mapcar (lambda (x)
-               (substring x 1)) (string-split tags-line " ")))
+  (vconcat (mapcar (lambda (x)
+                      (substring x 1)) (string-split tags-line " "))))
 
 (defun convert-to-thought ()
   (interactive)
@@ -30,7 +29,7 @@
          (title (substring (car parts) 2))
          (tags (convert-to-tags (cadr parts)))
          (body (cadddr parts)))
-    `((title . ,title) (body . ,body) (tags . (,tags)))))
+    `((title . ,title) (body . ,body) (is_image . :false) (tags . ,tags))))
 
 (defun convert-to-json (payload)
   (prin1 payload)
@@ -40,9 +39,6 @@
   (interactive)
   (let* ((thought (convert-to-thought))
          (json (convert-to-json thought)))
-    (message "before")
-    (prin1 json)
-    (message "after")
     (url-request-method "POST")
     (url-request-extra-headers
      '(("Authorization" . (concat "Bearer " token))))
