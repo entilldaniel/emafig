@@ -22,7 +22,9 @@
 
 
 (require 'url)
-(setq token "hltc8L1x6NCusoHqkUJUmmhdHbN8Hwfkzu5XRTKWiEqQym5n") ;; Local instance no point in trying.
+
+(defvar emafig-token "CHANGEME"
+  "The token that you created in the admin backend.")
 
 (defun emafig-open-template-buffer ()
   "Open a new buffer formatted for sending a thought."
@@ -54,11 +56,14 @@
          (json (json-serialize thought))
          (url-request-method "POST")
          (url-request-extra-headers
-          '(("Authorization" . (concat "Bearer " token))))
-         (url-request-data json))
+          `(("Authorization" . ,(concat "Bearer " emafig-token))
+            ("Content-Type" . "application/json")))
+         (url-request-data (encode-coding-string json 'utf-8)))
     (url-retrieve-synchronously "http://localhost:4000/api/thoughts")))
 
 (defun emafig-convert-to-tags (tags-line)
   (vconcat (mapcar (lambda (x)
                       (substring x 1)) (string-split tags-line " "))))
+
+
 
