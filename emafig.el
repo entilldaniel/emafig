@@ -20,7 +20,6 @@
       (message "EMAFIG mode enabled")
     (message "EMAFIG mode disabled")))
 
-
 (require 'url)
 
 (defvar emafig-token "CHANGEME"
@@ -61,11 +60,9 @@
           `(("Authorization" . ,(concat "Bearer " emafig-token))
             ("Content-Type" . "application/json")))
          (url-request-data (encode-coding-string json 'utf-8)))
-    (url-retrieve-synchronously ,(concat emafig-host "/api/thoughts"))))
+    (url-retrieve-synchronously (concat `,emafig-host "/api/thoughts"))))
 
 (defun emafig-convert-to-tags (tags-line)
   (vconcat (mapcar (lambda (x)
-                      (substring x 1)) (string-split tags-line " "))))
-
-
+                     (substring x 1)) (string-split tags-line " "))))
 

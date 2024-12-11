@@ -1,0 +1,38 @@
+
+:token = "<your-token-here>"    
+###
+
+GET https://figueroa.se/api/thoughts
+Accept: application/json
+Authorization: Bearer :token
+
+#####
+GET https://figueroa.se/api/thoughts/143
+Accept: application/json
+Authorization: Bearer 
+
+#####
+POST https://figueroa.se/api/thoughts
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer :token
+
+{
+ "title": "From Emacs",
+ "body": "I really __love__ baking bread!",
+ "tags": ["oven", "dough", "baking", "sourdough"],
+ "is_image": false
+}
+
+#####
+POST https://figueroa.se/api/thoughts
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer :token
+
+{
+ "title": "With love",
+ "body": "https://upload.wikimedia.org/wikipedia/commons/7/74/12_pound_Cannon_Fire_at_Kronborg.jpg",
+ "tags": ["cannons", "fire", "danger"],
+ "is_image": true
+}
