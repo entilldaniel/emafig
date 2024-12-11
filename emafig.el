@@ -25,6 +25,8 @@
 
 (defvar emafig-token "CHANGEME"
   "The token that you created in the admin backend.")
+(defvar emafig-host "http://localhost:4000"
+  "The host for emafig")
 
 (defun emafig-open-template-buffer ()
   "Open a new buffer formatted for sending a thought."
@@ -59,7 +61,7 @@
           `(("Authorization" . ,(concat "Bearer " emafig-token))
             ("Content-Type" . "application/json")))
          (url-request-data (encode-coding-string json 'utf-8)))
-    (url-retrieve-synchronously "http://localhost:4000/api/thoughts")))
+    (url-retrieve-synchronously ,(concat emafig-host "/api/thoughts"))))
 
 (defun emafig-convert-to-tags (tags-line)
   (vconcat (mapcar (lambda (x)
