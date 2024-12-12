@@ -45,7 +45,7 @@
          (parts (string-split raw-thought "\n"))
          (title (substring (car parts) 2))
          (tags (emafig-convert-to-tags (cadr parts)))
-         (body (cadddr parts)))
+         (body (string-join (cl-subseq parts 3 (length parts)) "\n")))
     `((title . ,title)
       (body . ,body)
       (is_image . :false)
