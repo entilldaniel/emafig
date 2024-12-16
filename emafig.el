@@ -27,9 +27,9 @@
 (defvar emafig-host "http://localhost:4000"
   "The host for emafig")
 
-(defun emafig-open-template-buffer ()
+(defun emafig-open-template-buffer (has_image)
   "Open a new buffer formatted for sending a thought."
-  (interactive)
+  (interactive (list (y-or-n-p "Is this an image thought?")))
   (let ((buffer-name "*Figueroa - Create Thought*")
         (template-content "# \n#tags\n\nBody"))
     (get-buffer-create buffer-name)
@@ -38,6 +38,10 @@
     (insert template-content)
     (markdown-mode)
     (emafig-mode)
+    (with-current-buffer (current-buffer)
+      (progn
+        (setq is_image has_image)
+        (make-local-variable 'is_image)))
     (goto-char (+ (point-min) 2))))
 
 (defun emafig-convert-buffer-to-thought ()
@@ -48,13 +52,13 @@
          (body (string-join (cl-subseq parts 3 (length parts)) "\n")))
     `((title . ,title)
       (body . ,body)
-      (is_image . :false)
+      (is_image . ,is_image)
       (tags . ,tags)))) ;; json-serialize needs a vector and not a list.
 
 (defun emafig-convert-and-send ()
   (interactive)
   (let* ((thought (emafig-convert-buffer-to-thought))
-         (json (json-serialize thought))
+         (json (json-serialize thought :false-object nil))
          (url-request-method "POST")
          (url-request-extra-headers
           `(("Authorization" . ,(concat "Bearer " emafig-token))
