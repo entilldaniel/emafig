@@ -6,9 +6,11 @@
 ;;
 ;;
 
+(require 'url)
+
 (define-minor-mode emafig-mode
   "Toggles the emafig mode"
-  nil ; Initial value, nil for disabled
+  nil                                ; Initial value, nil for disabled
   :global nil
   :group 'markdown
   :lighter " emafig"
@@ -19,8 +21,6 @@
   (if emafig-mode
       (message "EMAFIG mode enabled")
     (message "EMAFIG mode disabled")))
-
-(require 'url)
 
 (defvar emafig-token "CHANGEME"
   "The token that you created in the admin backend.")
@@ -56,7 +56,6 @@
       (tags . ,tags)))) ;; json-serialize needs a vector and not a list.
 
 (defun emafig-convert-and-send ()
-  (interactive)
   (let* ((thought (emafig-convert-buffer-to-thought))
          (json (json-serialize thought :false-object nil))
          (url-request-method "POST")
